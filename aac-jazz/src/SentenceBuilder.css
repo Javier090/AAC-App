@@ -1,0 +1,26 @@
+.sentence-box {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px; /* Spacing between selected cards */
+    padding: 16px;
+    background-color: #f8f8f8;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    min-height: 100px;
+  }
+  
+  .sentence-box .card {
+    background-color: #fff;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    text-align: center;
+    cursor: grab;
+  }
+  
+  .sentence-output {
+    margin-top: 16px;
+    font-size: 18px;
+    font-weight: bold;
+  }
+  

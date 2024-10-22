@@ -1,0 +1,94 @@
+/* CommunicationBoard.css */
+.communication-board {
+    display: grid;
+    grid-template-columns: 3fr 1fr;  /* Left: Card and Sentence (3/4), Right: Settings (1/4) */
+    gap: 20px;
+    padding: 20px;
+  }
+  
+  @media (max-width: 768px) {
+    .communication-board {
+      grid-template-columns: 1fr; /* Stack settings panel and content vertically in mobile view */
+    }
+  }
+  
+  .card-deck {
+    background-color: white;
+    border: 1px solid #000000;
+    padding: 16px;
+    border-radius: 4px;
+  }
+  
+  .deck-selector {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 16px;
+  }
+  
+  .deck-selector button {
+    padding: 8px 12px;
+  }
+  
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+  
+  .card {
+    background-color: #f0f0f0;
+    padding: 16px;
+    border: 1px solid #000000;
+    text-align: center;
+    cursor: pointer;
+  }
+  
+  .card img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+  }
+  
+  .sentence-box {
+    background-color: #ffffff;
+    padding: 16px;
+    min-height: 60px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    border: 1px solid #000000;
+    border-radius: 4px;
+  }
+  
+  .sentence-output {
+    margin-top: 16px;
+    font-size: 18px;
+    font-weight: bold;
+  }
+  
+  .footer-sentence {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .footer-sentence input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .mobile-toggle-button {
+      background-color: #3182ce;  
+      color: white;
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+  }
+  
+  .mobile-toggle-button:hover {
+      background-color: #2b6cb0; /* Slightly darker on hover */
+ }
+  

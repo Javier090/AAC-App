@@ -1,0 +1,38 @@
+/* SettingsPanel.css */
+.settings-panel {
+    background-color: #538614;
+    padding: 16px;
+    border: 2px solid #ddd;
+    border-radius: 4px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    width: 100%;
+  }
+  
+  .settings-panel h2 {
+    font-size: 18px;
+    margin-bottom: 16px;
+  }
+  
+  .settings-panel section {
+    margin-bottom: 16px;
+  }
+  
+  .settings-panel label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+  }
+  
+  .settings-panel input[type="checkbox"] {
+    margin-right: 8px;
+  }
+  
+  .settings-panel input[type="range"] {
+    width: 100%;
+    margin-top: 8px;
+  }
+  
+  .audio-settings {
+    margin-top: 20px
+  }
+  

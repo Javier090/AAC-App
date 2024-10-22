@@ -1,10 +1,11 @@
 import React from 'react';
+import CommunicationBoard from './CommunicationBoard';
+import './App.css';
 
 function App() {
   return (
-    <div>
-      <h1>Hello, React!</h1>
-      <p>Welcome to my website.</p>
+    <div className="App">
+      <CommunicationBoard />
     </div>
   );
 }

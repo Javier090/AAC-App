@@ -1,0 +1,46 @@
+.card-deck {
+    display: grid;
+    gap: 16px; /* Adjust spacing as needed */
+  }
+  
+  @media (min-width: 768px) {
+    /* Desktop layout: 4 columns */
+    .card-deck {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+  
+  @media (max-width: 768px) {
+    /* Mobile layout: 2 columns */
+    .card-deck {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  .card {
+    background-color: white;
+    padding: 16px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    text-align: center;
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+  }
+  
+  .card:hover {
+    background-color: #BF046B;
+  }
+  
+  .card img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    margin-bottom: 8px;
+  }
+  
+  .card p {
+    margin: 0;
+    font-weight: bold;
+    color: black;
+  }
+  

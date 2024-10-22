@@ -48,6 +48,10 @@ const CommunicationBoard = () => {
     setCurrentDeck(deck);
   };
 
+  const onClearAll = () => {
+    setSelectedCards([]);
+  };
+
   return (
     <div className="min-h-screen bg-gray-100">
       <header className="bg-blue-600 text-white p-4 flex justify-between items-center relative">
@@ -74,6 +78,7 @@ const CommunicationBoard = () => {
             <SentenceBuilder
               selectedCards={selectedCards}
               onCardRemove={handleCardRemove}
+              onClearAll={onClearAll}
             />
           </div>
 

@@ -1,6 +1,6 @@
 .card-deck {
     display: grid;
-    gap: 16px; /* Adjust spacing as needed */
+    gap: 18px; /* Adjust spacing as needed */
   }
   
   @media (min-width: 768px) {

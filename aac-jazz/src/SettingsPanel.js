@@ -18,7 +18,7 @@ const SettingsPanel = () => {
   };
 
   return (
-    <div className="settings-panel">  {/* Ensure it follows the new settings panel layout */}
+    <div className="settings-panel"> 
       <h2 className="settings-title">Settings</h2>
       
       <div className="settings-section">

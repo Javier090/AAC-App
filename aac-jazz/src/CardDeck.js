@@ -1,9 +1,7 @@
 import React from 'react';
 import './CardDeck.css';
 
-const CardDeck = ({ currentDeck, onCardSelect, onDeckChange, isMobileView }) => {
-  const decks = ['nouns', 'verbs', 'adjectives', 'grammar'];
-
+const CardDeck = ({ currentDeck, decks, onCardSelect, onDeckChange, isMobileView }) => {
   return (
     <div className="mb-6">
       <div className="mb-4">
@@ -13,8 +11,8 @@ const CardDeck = ({ currentDeck, onCardSelect, onDeckChange, isMobileView }) => 
             onChange={(e) => onDeckChange(e.target.value)}
           >
             {decks.map(deck => (
-              <option key={deck} value={deck}>
-                {deck.charAt(0).toUpperCase() + deck.slice(1)}
+              <option key={deck.id} value={deck.id}>
+                {deck.name.charAt(0).toUpperCase() + deck.name.slice(1)}
               </option>
             ))}
           </select>
@@ -22,11 +20,11 @@ const CardDeck = ({ currentDeck, onCardSelect, onDeckChange, isMobileView }) => 
           <div className="flex space-x-2">
             {decks.map(deck => (
               <button
-                key={deck}
-                onClick={() => onDeckChange(deck)}
+                key={deck.id}
+                onClick={() => onDeckChange(deck.id)}
                 className="px-4 py-2 bg-white rounded shadow hover:bg-gray-100"
               >
-                {deck.charAt(0).toUpperCase() + deck.slice(1)}
+                {deck.name.charAt(0).toUpperCase() + deck.name.slice(1)}
               </button>
             ))}
           </div>
@@ -35,16 +33,16 @@ const CardDeck = ({ currentDeck, onCardSelect, onDeckChange, isMobileView }) => 
 
       <div className={`card-deck ${isMobileView ? 'grid-cols-2' : 'grid-cols-4'}`}>
         {currentDeck.map(card => (
-            <button
+          <button
             key={card.id}
             onClick={() => onCardSelect(card)}
             className="card"
-            >
-            <img src={card.image} alt={card.text} className="card-img" />
+          >
+            <img src={card.image_url} alt={card.text} className="card-img" />
             <p>{card.text}</p>
-            </button>
+          </button>
         ))}
-        </div>
+      </div>
     </div>
   );
 };

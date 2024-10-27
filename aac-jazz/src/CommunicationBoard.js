@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import CardDeck from './CardDeck';
 import SentenceBuilder from './SentenceBuilder';
 import SettingsPanel from './SettingsPanel';
@@ -6,35 +7,44 @@ import './CommunicationBoard.css';
 
 const CommunicationBoard = () => {
   const [selectedCards, setSelectedCards] = useState([]);
-  const [currentDeck, setCurrentDeck] = useState('nouns');
+  const [currentDeck, setCurrentDeck] = useState(null);
+  const [decks, setDecks] = useState([]);
+  const [cards, setCards] = useState([]);
   const [isMobileView, setIsMobileView] = useState(false);
 
-  const decks = {
-    nouns: [
-      { id: 1, text: 'I', image: '/api/placeholder/120/120' },
-      { id: 2, text: 'water', image: '/api/placeholder/120/120' },
-      { id: 3, text: 'food', image: '/api/placeholder/120/120' },
-      { id: 4, text: 'bathroom', image: '/api/placeholder/120/120' },
-    ],
-    verbs: [
-      { id: 5, text: 'want', image: '/api/placeholder/120/120' },
-      { id: 6, text: 'need', image: '/api/placeholder/120/120' },
-      { id: 7, text: 'like', image: '/api/placeholder/120/120' },
-      { id: 8, text: 'go', image: '/api/placeholder/120/120' },
-    ],
-    adjectives: [
-      { id: 9, text: 'hot', image: '/api/placeholder/120/120' },
-      { id: 10, text: 'cold', image: '/api/placeholder/120/120' },
-      { id: 11, text: 'happy', image: '/api/placeholder/120/120' },
-      { id: 12, text: 'sad', image: '/api/placeholder/120/120' },
-    ],
-    grammar: [
-      { id: 13, text: 'to', image: '/api/placeholder/120/120' },
-      { id: 14, text: 'the', image: '/api/placeholder/120/120' },
-      { id: 15, text: 'please', image: '/api/placeholder/120/120' },
-      { id: 16, text: 'thank you', image: '/api/placeholder/120/120' },
-    ]
-  };
+  // Fetch all decks on component mount
+  useEffect(() => {
+    const fetchDecks = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/api/decks');
+        setDecks(response.data);
+        // Set the first deck as the current deck
+        if (response.data.length > 0) {
+          setCurrentDeck(response.data[0]);
+        }
+      } catch (error) {
+        console.error('Error fetching decks:', error);
+      }
+    };
+
+    fetchDecks();
+  }, []);
+
+  // Fetch cards whenever the current deck changes
+  useEffect(() => {
+    const fetchCards = async () => {
+      if (currentDeck) {
+        try {
+          const response = await axios.get(`http://localhost:5000/api/decks/${currentDeck.id}/cards`);
+          setCards(response.data);
+        } catch (error) {
+          console.error('Error fetching cards:', error);
+        }
+      }
+    };
+
+    fetchCards();
+  }, [currentDeck]);
 
   const handleCardSelect = (card) => {
     setSelectedCards([...selectedCards, card]);
@@ -44,8 +54,9 @@ const CommunicationBoard = () => {
     setSelectedCards(selectedCards.filter(card => card.id !== cardId));
   };
 
-  const handleDeckChange = (deck) => {
-    setCurrentDeck(deck);
+  const handleDeckChange = (deckId) => {
+    const selectedDeck = decks.find(deck => deck.id === parseInt(deckId));
+    setCurrentDeck(selectedDeck);
   };
 
   const onClearAll = () => {
@@ -70,7 +81,8 @@ const CommunicationBoard = () => {
           {/* Left: Card Deck and Sentence Builder */}
           <div>
             <CardDeck
-              currentDeck={decks[currentDeck]}
+              currentDeck={cards}
+              decks={decks}
               onCardSelect={handleCardSelect}
               onDeckChange={handleDeckChange}
               isMobileView={isMobileView}

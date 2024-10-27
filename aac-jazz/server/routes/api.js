@@ -1,8 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const dataController = require('../controllers/dataController');
+const deckController = require('../controllers/deckController');
 
-router.get('/data', dataController.getData);
-router.post('/data', dataController.postData);
+// Route to get all decks
+router.get('/decks', deckController.getAllDecks);
+
+// Route to get cards for a specific deck
+router.get('/decks/:id/cards', deckController.getCardsByDeckId);
 
 module.exports = router;

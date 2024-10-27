@@ -1,14 +1,32 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import './SettingsPanel.css';
-import './CommunicationBoard.css'  // Ensure this file matches the class names below
+import './CommunicationBoard.css'  
+import { cardSound } from './CardSound.js';
 
 const SettingsPanel = () => {
   const [settings, setSettings] = useState({
     colorBlindMode: false,
     screenReader: false,
-    cardSound: true,
+    cardSound: false,
     volume: 50
   });
+
+  // Effect to apply color blind mode to body element
+  useEffect(() => {
+    if (settings.colorBlindMode) {
+      document.body.classList.add('color-blind-mode');
+    } else {
+      document.body.classList.remove('color-blind-mode');
+    }
+  }, [settings.colorBlindMode]);
+
+  // Import card sound to update card sound settings
+  useEffect(() => {
+    cardSound.setEnabled(settings.cardSound);
+    cardSound.setVolume(settings.volume);
+  }, [settings.cardSound, settings.volume]);
+
+
 
   const handleSettingChange = (setting, value) => {
     setSettings(prev => ({
@@ -18,7 +36,7 @@ const SettingsPanel = () => {
   };
 
   return (
-    <div className="settings-panel"> 
+    <div className={`settings-panel ${settings.colorBlindMode ? 'color-blind-active' : ''}`}>
       <h2 className="settings-title">Settings</h2>
       
       <div className="settings-section">
@@ -31,8 +49,9 @@ const SettingsPanel = () => {
               onChange={(e) => handleSettingChange('colorBlindMode', e.target.checked)}
               className="option-checkbox"
             />
-            Color Blind Mode
+            <span className="checkbox-text">Color Blind Mode</span>
           </label>
+          
           <label className="option-label">
             <input
               type="checkbox"
@@ -40,7 +59,7 @@ const SettingsPanel = () => {
               onChange={(e) => handleSettingChange('screenReader', e.target.checked)}
               className="option-checkbox"
             />
-            Screen Reader
+            <span className="checkbox-text">Screen Reader</span>
           </label>
         </div>
       </div>
@@ -55,8 +74,9 @@ const SettingsPanel = () => {
               onChange={(e) => handleSettingChange('cardSound', e.target.checked)}
               className="option-checkbox"
             />
-            Card Sound
+            <span className="checkbox-text">Card Sound</span>
           </label>
+          
           <div className="volume-control">
             <label className="volume-label">Volume</label>
             <input

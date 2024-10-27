@@ -78,7 +78,10 @@ const CommunicationBoard = () => {
 
       <main className="container mx-auto p-4">
         <div className="communication-board">
-          {/* Left: Card Deck and Sentence Builder */}
+          {/* Left: Settings Panel */}
+          <SettingsPanel />
+
+          {/* Right: Card Deck and Sentence Builder */}
           <div>
             <CardDeck
               currentDeck={cards}
@@ -93,9 +96,6 @@ const CommunicationBoard = () => {
               onClearAll={onClearAll}
             />
           </div>
-
-          {/* Right: Settings Panel */}
-          <SettingsPanel />
         </div>
       </main>
     </div>

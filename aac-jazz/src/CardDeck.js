@@ -1,7 +1,14 @@
 import React from 'react';
 import './CardDeck.css';
+import { cardSound } from './CardSound.js'; // Import the cardSound service
 
 const CardDeck = ({ currentDeck, decks, onCardSelect, onDeckChange, isMobileView }) => {
+
+  const handleCardClick = (card) => {
+    onCardSelect(card);
+    cardSound.speak(card.text); // Speak the card's text
+  };
+
   return (
     <div className="mb-6">
       <div className="mb-4">
@@ -35,7 +42,7 @@ const CardDeck = ({ currentDeck, decks, onCardSelect, onDeckChange, isMobileView
         {currentDeck.map(card => (
           <button
             key={card.id}
-            onClick={() => onCardSelect(card)}
+            onClick={() => handleCardClick(card)} // Uses the new handleCardClick function
             className="card"
           >
             <img src={card.image_url} alt={card.text} className="card-img" />

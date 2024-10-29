@@ -11,6 +11,7 @@ app.use(express.json());
 // Routes
 const apiRoutes = require('./routes/api');
 app.use('/api', apiRoutes);
+app.use('/images', express.static('images'));
 
 // Start the server
 const PORT = process.env.PORT || 5000;

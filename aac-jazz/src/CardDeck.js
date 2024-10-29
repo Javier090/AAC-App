@@ -4,6 +4,8 @@ import { cardSound } from './CardSound.js'; // Import the cardSound service
 
 const CardDeck = ({ currentDeck, decks, onCardSelect, onDeckChange, isMobileView }) => {
 
+  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+
   const handleCardClick = (card) => {
     onCardSelect(card);
     cardSound.speak(card.text); // Speak the card's text
@@ -45,7 +47,11 @@ const CardDeck = ({ currentDeck, decks, onCardSelect, onDeckChange, isMobileView
             onClick={() => handleCardClick(card)} // Uses the new handleCardClick function
             className="card"
           >
-            <img src={card.image_url} alt={card.text} className="card-img" />
+            <img
+              src={`${API_URL}${card.image_url}`}
+              alt={card.text}
+              className="card-img"
+            />
             <p>{card.text}</p>
           </button>
         ))}

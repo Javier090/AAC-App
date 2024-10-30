@@ -3,6 +3,7 @@ import './SettingsPanel.css';
 import './CommunicationBoard.css'  
 import { cardSound } from './CardSound.js';
 
+  // SettingsPanel component for all settings
 const SettingsPanel = () => {
   const [settings, setSettings] = useState({
     colorBlindMode: false,
@@ -11,7 +12,7 @@ const SettingsPanel = () => {
     volume: 50
   });
 
-  // Effect to apply color blind mode to body element
+  // UseEffect to apply color blind mode to body element
   useEffect(() => {
     if (settings.colorBlindMode) {
       document.body.classList.add('color-blind-mode');
@@ -20,14 +21,14 @@ const SettingsPanel = () => {
     }
   }, [settings.colorBlindMode]);
 
-  // Import card sound to update card sound settings
+  // Import card sound js file to update card sound settings
   useEffect(() => {
     cardSound.setEnabled(settings.cardSound);
     cardSound.setVolume(settings.volume);
   }, [settings.cardSound, settings.volume]);
 
 
-
+  // Function to handle setting changes
   const handleSettingChange = (setting, value) => {
     setSettings(prev => ({
       ...prev,

@@ -4,6 +4,7 @@ import { cardSound } from './CardSound.js'; // Import the cardSound service
 
 const CardDeck = ({ currentDeck, decks, onCardSelect, onDeckChange, isMobileView }) => {
 
+  // Fetch cards from the database using local API URL
   const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
   const handleCardClick = (card) => {
@@ -19,9 +20,9 @@ const CardDeck = ({ currentDeck, decks, onCardSelect, onDeckChange, isMobileView
             className="w-full p-2 border rounded"
             onChange={(e) => onDeckChange(e.target.value)}
           >
-            {decks.map(deck => (
-              <option key={deck.id} value={deck.id}>
-                {deck.name.charAt(0).toUpperCase() + deck.name.slice(1)}
+            {decks.map(deck => ( // Maps trough the decks from the database
+              <option key={deck.id} value={deck.id}> {/* Gets deck id and name from the database  */}
+                {deck.name.charAt(0).toUpperCase() + deck.name.slice(1)} 
               </option>
             ))}
           </select>

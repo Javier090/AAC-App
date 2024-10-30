@@ -5,6 +5,7 @@ import SentenceBuilder from './SentenceBuilder';
 import SettingsPanel from './SettingsPanel';
 import './CommunicationBoard.css';
 
+// CommunicationBoard useState from API  using axios and local API URL
 const CommunicationBoard = () => {
   const [selectedCards, setSelectedCards] = useState([]);
   const [currentDeck, setCurrentDeck] = useState(null);
@@ -35,7 +36,7 @@ const CommunicationBoard = () => {
     const fetchCards = async () => {
       if (currentDeck) {
         try {
-          const response = await axios.get(`http://localhost:5000/api/decks/${currentDeck.id}/cards`);
+          const response = await axios.get(`http://localhost:5000/api/decks/${currentDeck.id}/cards`); // GET all cards for the current deck
           setCards(response.data);
         } catch (error) {
           console.error('Error fetching cards:', error);
@@ -48,20 +49,20 @@ const CommunicationBoard = () => {
 
   const handleCardSelect = (card) => {
     setSelectedCards([...selectedCards, card]);
-  };
+  }; // Handler for card selection
 
   const handleCardRemove = (cardId) => {
     setSelectedCards(selectedCards.filter(card => card.id !== cardId));
-  };
+  }; // Handler for card removal 
 
   const handleDeckChange = (deckId) => {
     const selectedDeck = decks.find(deck => deck.id === parseInt(deckId));
     setCurrentDeck(selectedDeck);
-  };
+  }; // Handler for changing deck 
 
   const onClearAll = () => {
     setSelectedCards([]);
-  };
+  };  // Handler for clearing all selected cards
 
   return (
     <div className="min-h-screen bg-gray-100">

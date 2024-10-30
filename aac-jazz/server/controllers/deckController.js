@@ -3,7 +3,7 @@ const db = require('../db/config');
 // Fetch all decks
 exports.getAllDecks = async (req, res) => {
   try {
-    const [rows] = await db.query('SELECT * FROM decks');
+    const [rows] = await db.query('SELECT * FROM decks'); // SELECT all decks from the database
     res.json(rows);
   } catch (err) {
     console.error('Error fetching decks:', err);
@@ -15,7 +15,7 @@ exports.getAllDecks = async (req, res) => {
 exports.getCardsByDeckId = async (req, res) => {
   const deckId = req.params.id;
   try {
-    const [rows] = await db.query('SELECT * FROM cards WHERE deck_id = ?', [deckId]);
+    const [rows] = await db.query('SELECT * FROM cards WHERE deck_id = ?', [deckId]); // Check if the deck exists, and query's id from the database
     res.json(rows);
   } catch (err) {
     console.error('Error fetching cards:', err);

@@ -4,11 +4,11 @@ require('dotenv').config();
 
 const app = express();
 
-// Middleware
+// Middleware CORS: Enables Cross-Origin Resource Sharing, JSON parser for requests
 app.use(cors());
 app.use(express.json());
 
-// Routes
+// Routes for the API
 const apiRoutes = require('./routes/api');
 app.use('/api', apiRoutes);
 app.use('/images', express.static('images'));

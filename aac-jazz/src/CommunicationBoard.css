@@ -8,7 +8,7 @@
   
   @media (max-width: 768px) {
     .communication-board {
-      grid-template-columns: 1fr; /* Stack settings panel and content vertically in mobile view */
+      grid-template-columns: 1fr; /* Stacks settings panel and content vertically in mobile view */
     }
   }
   

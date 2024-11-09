@@ -17,7 +17,7 @@ const CommunicationBoard = () => {
   useEffect(() => {
     const fetchDecks = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/decks');
+        const response = await axios.get('http://localhost:3306/api/decks');
         setDecks(response.data);
         // Set the first deck as the current deck
         if (response.data.length > 0) {
@@ -36,7 +36,7 @@ const CommunicationBoard = () => {
     const fetchCards = async () => {
       if (currentDeck) {
         try {
-          const response = await axios.get(`http://localhost:5000/api/decks/${currentDeck.id}/cards`); // GET all cards for the current deck
+          const response = await axios.get(`http://localhost:3306/api/decks/${currentDeck.id}/cards`); // GET all cards for the current deck
           setCards(response.data);
         } catch (error) {
           console.error('Error fetching cards:', error);
@@ -80,7 +80,8 @@ const CommunicationBoard = () => {
       <main className="container mx-auto p-4">
         <div className="communication-board">
           {/* Left: Settings Panel */}
-          <SettingsPanel />
+          <SettingsPanel 
+              />
 
           {/* Right: Card Deck and Sentence Builder */}
           <div>

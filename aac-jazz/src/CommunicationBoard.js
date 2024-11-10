@@ -5,6 +5,7 @@ import SentenceBuilder from './SentenceBuilder';
 import SettingsPanel from './SettingsPanel';
 import './CommunicationBoard.css';
 
+
 // CommunicationBoard useState from API  using axios and local API URL
 const CommunicationBoard = () => {
   const [selectedCards, setSelectedCards] = useState([]);
@@ -13,6 +14,7 @@ const CommunicationBoard = () => {
   const [cards, setCards] = useState([]);
   const [isMobileView, setIsMobileView] = useState(false);
 
+  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
   // Fetch all decks on component mount
   useEffect(() => {
     const fetchDecks = async () => {

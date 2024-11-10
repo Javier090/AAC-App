@@ -37,7 +37,7 @@
 
 /* Enhanced Color Blind Mode Styles */
 body.color-blind-mode {
-  /* High contrast background for the entire page */
+  /* Crates contrast background for the entire page */
   background-color: #000;
   color: #ff7300;
 }
@@ -60,7 +60,7 @@ body.color-blind-mode .settings-panel input[type="checkbox"]:checked {
   border-color: #000;
 }
 
-/* High contrast navigation buttons */
+/* Creates high contrast navigation buttons */
 body.color-blind-mode button {
   background-color: #fff;
   color: #000;
@@ -70,7 +70,7 @@ body.color-blind-mode button {
   font-weight: bold;
 }
 
-/* Make the communication cards more visible */
+/* Makes the communication cards more visible */
 body.color-blind-mode .card {
   background-color: #ffa200dc;
   border: 3px solid #fff;
@@ -78,7 +78,7 @@ body.color-blind-mode .card {
   margin: 8px;
 }
 
-/* Enhance contrast for text elements */
+/* Enhances contrast for text elements */
 body.color-blind-mode h1,
 body.color-blind-mode h2,
 body.color-blind-mode label {
@@ -86,7 +86,7 @@ body.color-blind-mode label {
   text-shadow: 1px 1px 2px #000;
 }
 
-/* Make the volume slider more visible */
+/* Makes the volume slider more visible */
 body.color-blind-mode input[type="range"] {
   background-color: #fff;
   border: 2px solid #fff;

@@ -14,12 +14,12 @@ const CommunicationBoard = () => {
   const [cards, setCards] = useState([]);
   const [isMobileView, setIsMobileView] = useState(false);
 
-  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+  const API_URL = process.env.REACT_APP_API_URL || 'https://aac-jazz-app.azurewebsites.net';
   // Fetch all decks on component mount
   useEffect(() => {
     const fetchDecks = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/decks');
+        const response = await axios.get(`${API_URL}/api/decks`);
         setDecks(response.data);
         // Set the first deck as the current deck
         if (response.data.length > 0) {
@@ -31,14 +31,14 @@ const CommunicationBoard = () => {
     };
 
     fetchDecks();
-  }, []);
+  }, [API_URL]);
 
   // Fetch cards whenever the current deck changes
   useEffect(() => {
     const fetchCards = async () => {
       if (currentDeck) {
         try {
-          const response = await axios.get(`http://localhost:5000/api/decks/${currentDeck.id}/cards`); // GET all cards for the current deck
+          const response = await axios.get(`${API_URL}/api/decks/${currentDeck.id}/cards`); // GET all cards for the current deck
           setCards(response.data);
         } catch (error) {
           console.error('Error fetching cards:', error);
@@ -47,7 +47,7 @@ const CommunicationBoard = () => {
     };
 
     fetchCards();
-  }, [currentDeck]);
+  },[currentDeck, API_URL]);
 
   const handleCardSelect = (card) => {
     setSelectedCards([...selectedCards, card]);

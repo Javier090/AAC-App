@@ -5,7 +5,7 @@ import { cardSound } from './CardSound.js'; // Import the cardSound service
 const CardDeck = ({ currentDeck, decks, onCardSelect, onDeckChange, isMobileView }) => {
 
   // Fetch cards from the database using local API URL
-  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+  const API_URL = process.env.REACT_APP_API_URL || 'https://aac-jazz-app.azurewebsites.net';
 
   const handleCardClick = (card) => {
     onCardSelect(card);

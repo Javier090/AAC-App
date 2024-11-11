@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import CardDeck from './CardDeck';
+import { nanoid } from 'nanoid'; // Uses nanoID to create uniqueID to each card
 import SentenceBuilder from './SentenceBuilder';
 import SettingsPanel from './SettingsPanel';
 import './CommunicationBoard.css';
@@ -47,18 +48,24 @@ const CommunicationBoard = () => {
     };
 
     fetchCards();
-  },[currentDeck, API_URL]);
+  },[currentDeck, API_URL]); // Fetches card from Azure API 
 
   const handleCardSelect = (card) => {
-    setSelectedCards([...selectedCards, card]);
+    const newSelectedCard = {
+      ...card,
+      instanceId: nanoid(), // Creates a unique ID for each card 
+    };
+    setSelectedCards((prevSelectedCards) => [...prevSelectedCards, newSelectedCard]);
   }; // Handler for card selection
 
-  const handleCardRemove = (cardId) => {
-    setSelectedCards(selectedCards.filter(card => card.id !== cardId));
+  const handleCardRemove = (instanceId) => {
+    setSelectedCards((prevSelectedCards) =>
+      prevSelectedCards.filter((card) => card.instanceId !== instanceId) // Passes the unique ID to remove the card
+    );
   }; // Handler for card removal 
 
   const handleDeckChange = (deckId) => {
-    const selectedDeck = decks.find(deck => deck.id === parseInt(deckId));
+    const selectedDeck = decks.find((deck) => deck.id === parseInt(deckId, 10));
     setCurrentDeck(selectedDeck);
   }; // Handler for changing deck 
 

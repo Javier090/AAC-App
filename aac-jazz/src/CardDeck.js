@@ -12,6 +12,10 @@ const CardDeck = ({ currentDeck, decks, onCardSelect, onDeckChange, isMobileView
     cardSound.speak(card.text); // Speak the card's text
   };
 
+  const handleDragStart = (event, card) => {
+    event.dataTransfer.setData('card', JSON.stringify(card));
+  };
+
   return (
     <div className="mb-6">
       <div className="mb-4">
@@ -45,7 +49,8 @@ const CardDeck = ({ currentDeck, decks, onCardSelect, onDeckChange, isMobileView
         {currentDeck.map(card => (
           <button
             key={card.id}
-            onClick={() => handleCardClick(card)} // Uses the new handleCardClick function
+            onClick={() => handleCardClick(card)}
+            onDragStart={(e) => handleDragStart(e, card)}
             className="card"
           >
             <img

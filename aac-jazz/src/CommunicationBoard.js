@@ -5,7 +5,6 @@ import SentenceBuilder from './SentenceBuilder';
 import SettingsPanel from './SettingsPanel';
 import './CommunicationBoard.css';
 
-// CommunicationBoard useState from API  using axios and local API URL
 const CommunicationBoard = () => {
   const [selectedCards, setSelectedCards] = useState([]);
   const [currentDeck, setCurrentDeck] = useState(null);
@@ -13,13 +12,11 @@ const CommunicationBoard = () => {
   const [cards, setCards] = useState([]);
   const [isMobileView, setIsMobileView] = useState(false);
 
-  // Fetch all decks on component mount
   useEffect(() => {
     const fetchDecks = async () => {
       try {
         const response = await axios.get('http://localhost:5000/api/decks');
         setDecks(response.data);
-        // Set the first deck as the current deck
         if (response.data.length > 0) {
           setCurrentDeck(response.data[0]);
         }
@@ -31,12 +28,11 @@ const CommunicationBoard = () => {
     fetchDecks();
   }, []);
 
-  // Fetch cards whenever the current deck changes
   useEffect(() => {
     const fetchCards = async () => {
       if (currentDeck) {
         try {
-          const response = await axios.get(`http://localhost:5000/api/decks/${currentDeck.id}/cards`); // GET all cards for the current deck
+          const response = await axios.get(`http://localhost:5000/api/decks/${currentDeck.id}/cards`);
           setCards(response.data);
         } catch (error) {
           console.error('Error fetching cards:', error);
@@ -49,26 +45,30 @@ const CommunicationBoard = () => {
 
   const handleCardSelect = (card) => {
     setSelectedCards([...selectedCards, card]);
-  }; // Handler for card selection
+  };
 
   const handleCardRemove = (cardId) => {
     setSelectedCards(selectedCards.filter(card => card.id !== cardId));
-  }; // Handler for card removal 
+  };
 
   const handleDeckChange = (deckId) => {
     const selectedDeck = decks.find(deck => deck.id === parseInt(deckId));
     setCurrentDeck(selectedDeck);
-  }; // Handler for changing deck 
+  };
 
   const onClearAll = () => {
     setSelectedCards([]);
-  };  // Handler for clearing all selected cards
+  };
+
+  // New: Handler for card drop
+  const handleCardDrop = (card) => {
+    setSelectedCards([...selectedCards, card]);
+  };
 
   return (
     <div className="min-h-screen bg-gray-100">
       <header className="bg-blue-600 text-white p-4 flex justify-between items-center relative">
         <h1 className="text-2xl font-bold">Communication Board</h1>
-        {/* Mobile View Button positioned at the top-right */}
         <button
           onClick={() => setIsMobileView(!isMobileView)}
           className="mobile-toggle-button bg-blue-500 px-4 py-2 rounded absolute right-4 top-4"
@@ -84,7 +84,6 @@ const CommunicationBoard = () => {
               isMobileView={isMobileView}
           />
 
-          {/* Right: Card Deck and Sentence Builder */}
           <div>
             <CardDeck
               currentDeck={cards}
@@ -97,6 +96,7 @@ const CommunicationBoard = () => {
               selectedCards={selectedCards}
               onCardRemove={handleCardRemove}
               onClearAll={onClearAll}
+              onCardDrop={handleCardDrop}  /* Pass handleCardDrop to SentenceBuilder */
             />
           </div>
         </div>

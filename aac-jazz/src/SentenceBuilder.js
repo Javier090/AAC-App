@@ -14,10 +14,10 @@ const SentenceBuilder = ({selectedCards, onCardRemove, onClearAll}) => {
         <div className="remove-buttons">
           {selectedCards.map(card => (
             <button
-              key={card.id}
-              onClick={() => onCardRemove(card.id)}
+              key={card.instanceId}
+              onClick={() => onCardRemove(card.instanceId)} 
               className="remove-button"
-            >
+            > {/* Remove instance now removes based on unique identifier instead of assigned card ID */}
               Remove "{card.text}"
             </button>
           ))}

@@ -73,6 +73,10 @@ const CommunicationBoard = () => {
     setSelectedCards([]);
   };  // Handler for clearing all selected cards
 
+  const handleCardDrop = (card) => {
+    setSelectedCards([...selectedCards, card]);
+  }; // Handler for card drop
+
   return (
     <div className="min-h-screen bg-gray-100">
       <header className="bg-blue-600 text-white p-4 flex justify-between items-center relative">
@@ -89,8 +93,10 @@ const CommunicationBoard = () => {
       <main className="container mx-auto p-4">
         <div className="communication-board">
           {/* Left: Settings Panel */}
-          <SettingsPanel />
-
+          <SettingsPanel 
+              isMobileView={isMobileView}
+          />
+            
           {/* Right: Card Deck and Sentence Builder */}
           <div>
             <CardDeck
@@ -104,6 +110,7 @@ const CommunicationBoard = () => {
               selectedCards={selectedCards}
               onCardRemove={handleCardRemove}
               onClearAll={onClearAll}
+              onCardDrop={handleCardDrop}
             />
           </div>
         </div>

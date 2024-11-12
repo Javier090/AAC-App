@@ -35,7 +35,11 @@
   margin-top: 20px;
 }
 
-/* Enhanced Color Blind Mode Styles */
+.highlight {
+  outline: red solid 2px;
+}
+
+/* Enhanced (red-green) Color Blind Mode Styles */
 body.color-blind-mode {
   /* Crates contrast background for the entire page */
   background-color: #000;
@@ -46,7 +50,7 @@ body.color-blind-mode .settings-panel {
   /* High contrast panel background */
   background-color: #333;
   border: 2px solid #fff;
-  color: #fff;
+  color: #ff7300;
 }
 
 body.color-blind-mode .settings-panel input[type="checkbox"] {
@@ -62,8 +66,8 @@ body.color-blind-mode .settings-panel input[type="checkbox"]:checked {
 
 /* Creates high contrast navigation buttons */
 body.color-blind-mode button {
-  background-color: #fff;
-  color: #000;
+  background-color: #009E73;
+  color: #fff;
   border: 2px solid #fff;
   padding: 8px 16px;
   margin: 4px;
@@ -80,13 +84,17 @@ body.color-blind-mode .card {
 
 /* Enhances contrast for text elements */
 body.color-blind-mode h1,
-body.color-blind-mode h2,
 body.color-blind-mode label {
-  color: #ff4800;
+  color: #F0E442;
   text-shadow: 1px 1px 2px #000;
 }
 
-/* Makes the volume slider more visible */
+body.color-blind-mode h2 {
+  color: #56B4E9;
+  text-shadow: 1px 1px 1px #000;
+}
+
+/* Make the volume slider more visible */
 body.color-blind-mode input[type="range"] {
   background-color: #fff;
   border: 2px solid #fff;

@@ -21,6 +21,23 @@ const SettingsPanel = () => {
     }
   }, [settings.colorBlindMode]);
 
+// UseEffect to toggle a simple screen reader.
+  /*useEffect(() => {
+    if (settings.screenReader) {
+        document.addEventListener('mouseenter', function (e) {
+          e.target.classList.add('.highlight')
+          speechSynthesis.speak(new SpeechSynthesisUtterance(e))
+        })
+        document.addEventListener('mouseleave', function (e) {
+          e.target.classList.remove('.highlight')
+          speechSynthesis.cancel()
+        })
+      //}
+    } else {
+      speechSynthesis.cancel()
+    }
+  }, [settings.screenReader]);*/
+  
   // Import card sound js file to update card sound settings
   useEffect(() => {
     cardSound.setEnabled(settings.cardSound);

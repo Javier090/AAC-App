@@ -1,25 +1,24 @@
-// src/components/SentenceBuilder.js
 import React, { useState, useEffect } from 'react';
 import './SentenceBuilder.css';
 import './CommunicationBoard.css';
 import { sentenceSpeech } from './SentenceSpeech.js'; 
 
-const SentenceBuilder = ({ selectedCards, onCardRemove, onClearAll }) => {
+const SentenceBuilder = ({ selectedCards, onCardRemove, onClearAll, onCardDrop }) => {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [voices, setVoices] = useState([]);
   const [selectedVoice, setSelectedVoice] = useState(null);
   const [rate, setRate] = useState(1);
   const [pitch, setPitch] = useState(1);
 
-  // Creates a sentence by joining the text from the selected cards
+  // Create a sentence by joining the text from the selected cards
   const sentence = selectedCards.map(card => card.text).join(' ');
 
   // Fetches available voices on component mount
   useEffect(() => {
     const populateVoices = () => {
-      const availableVoices = window.speechSynthesis.getVoices(); // Gets available voices from the browser that user can choose from
+      const availableVoices = window.speechSynthesis.getVoices();
       setVoices(availableVoices);
-      const savedVoice = localStorage.getItem('selectedVoice'); // Fetches selected voice from local storage
+      const savedVoice = localStorage.getItem('selectedVoice');
       if (availableVoices.length > 0) {
         setSelectedVoice(savedVoice || availableVoices[0].name);
       }
@@ -27,6 +26,11 @@ const SentenceBuilder = ({ selectedCards, onCardRemove, onClearAll }) => {
 
     populateVoices();
     window.speechSynthesis.onvoiceschanged = populateVoices;
+
+    // Cleanup on unmount
+    return () => {
+      window.speechSynthesis.onvoiceschanged = null;
+    };
   }, []);
 
   // Fetch rate and pitch from localStorage if available
@@ -40,48 +44,49 @@ const SentenceBuilder = ({ selectedCards, onCardRemove, onClearAll }) => {
   // Cancel speech when selectedCards is cleared
   useEffect(() => {
     if (selectedCards.length === 0 && isSpeaking) {
-      sentenceSpeech.cancel(); // Stop any ongoing speech
-      setIsSpeaking(false);    // Reset the speaking state
+      sentenceSpeech.cancel();
+      setIsSpeaking(false);
     }
   }, [selectedCards, isSpeaking]);
 
+  // Handle voice change
   const handleVoiceChange = (voiceName) => {
     setSelectedVoice(voiceName);
     localStorage.setItem('selectedVoice', voiceName);
-  }; // Handler for voice change
+  };
 
+  // Handle rate change
   const handleRateChange = (newRate) => {
     setRate(newRate);
     localStorage.setItem('speechRate', newRate);
-  }; // Handler for rate change
+  };
 
+  // Handle pitch change
   const handlePitchChange = (newPitch) => {
     setPitch(newPitch);
     localStorage.setItem('speechPitch', newPitch);
-  }; // Handler for pitch change
+  };
 
+  // Speak or stop the sentence
   const speakSentence = () => {
     if (!window.speechSynthesis) {
-      alert('Sorry, your browser does not support Speech Synthesis.'); // Error handling for browsers that do not support speech synthesis
+      alert('Sorry, your browser does not support Speech Synthesis.');
       return;
     }
 
     if (isSpeaking) {
-      // If already speaking, cancel the speech
       sentenceSpeech.cancel();
       setIsSpeaking(false);
       return;
     }
 
     if (sentence.trim() === '') {
-      alert('Please select words to form a sentence.'); // Default error message for empty sentence
+      alert('Please select words to form a sentence.');
       return;
     }
 
-    // Find the selected voice object
     const voice = voices.find(v => v.name === selectedVoice);
 
-    // Initiate speaking
     sentenceSpeech.speak(sentence, {
       voice: voice,
       rate: rate,
@@ -89,31 +94,33 @@ const SentenceBuilder = ({ selectedCards, onCardRemove, onClearAll }) => {
       volume: 1.0, // Adjust volume as needed or make it dynamic
     });
 
-    setIsSpeaking(true); // Set speaking state to true
+    setIsSpeaking(true);
 
     // Event listeners for speech synthesis
     const handleEnd = () => {
       setIsSpeaking(false);
-      sentenceSpeech.speechSynthesis.removeEventListener('end', handleEnd); // Removes event listener after speech ends
+      sentenceSpeech.speechSynthesis.removeEventListener('end', handleEnd);
     };
 
     const handleError = (e) => {
       console.error('Sentence speech synthesis error:', e);
       setIsSpeaking(false);
-      sentenceSpeech.speechSynthesis.removeEventListener('error', handleError); // Removes event listener after error
+      sentenceSpeech.speechSynthesis.removeEventListener('error', handleError);
     };
 
     sentenceSpeech.speechSynthesis.addEventListener('end', handleEnd);
-    sentenceSpeech.speechSynthesis.addEventListener('error', handleError); // Adds event listener for error handling
+    sentenceSpeech.speechSynthesis.addEventListener('error', handleError);
   };
 
+  // Pause speech
   const pauseSpeech = () => {
-    if (window.speechSynthesis.speaking && !window.speechSynthesis.paused) { // Pauses speech if it is speaking and not paused
+    if (window.speechSynthesis.speaking && !window.speechSynthesis.paused) {
       window.speechSynthesis.pause();
       setIsSpeaking(false);
     }
   };
 
+  // Resume speech
   const resumeSpeech = () => {
     if (window.speechSynthesis.paused) {
       window.speechSynthesis.resume();
@@ -121,8 +128,20 @@ const SentenceBuilder = ({ selectedCards, onCardRemove, onClearAll }) => {
     }
   };
 
+  // Handle drag over event to allow dropping
+  const handleDragOver = (event) => {
+    event.preventDefault(); // Allows dropping
+  };
+
+  // Handle drop event to add a card to the sentence
+  const handleDrop = (event) => {
+    event.preventDefault();
+    const card = JSON.parse(event.dataTransfer.getData('card'));
+    onCardDrop(card);
+  };
+
   return (
-    <div className="sentence-container">
+    <div className="sentence-container" onDrop={handleDrop} onDragOver={handleDragOver}>
       <h2 className="sentence-label">Sentence:</h2>
       <div className="sentence-output">
         {sentence.length > 0 ? sentence : 'Start selecting words to form a sentence.'}
@@ -162,7 +181,7 @@ const SentenceBuilder = ({ selectedCards, onCardRemove, onClearAll }) => {
           {selectedCards.length > 0 ? 'Clear All' : 'Start Selecting'}
         </button>
 
-        {/* Read Sentence Button placed below "Clear All" */}
+        {/* Read Sentence Button */}
         <button
           onClick={speakSentence}
           className={`read-button ${isSpeaking ? 'speaking' : ''}`}
@@ -205,7 +224,7 @@ const SentenceBuilder = ({ selectedCards, onCardRemove, onClearAll }) => {
             value={rate}
             onChange={(e) => handleRateChange(parseFloat(e.target.value))}
             className="slider"
-            aria-label="Speech rate" // Aria label for speech rate slider
+            aria-label="Speech rate"
           />
           <span>{rate}</span>
         </label>
@@ -219,7 +238,7 @@ const SentenceBuilder = ({ selectedCards, onCardRemove, onClearAll }) => {
             value={pitch}
             onChange={(e) => handlePitchChange(parseFloat(e.target.value))}
             className="slider"
-            aria-label="Speech pitch" // Aria label for speech pitch slider
+            aria-label="Speech pitch"
           />
           <span>{pitch}</span>
         </label>

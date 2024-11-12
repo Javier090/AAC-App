@@ -4,7 +4,7 @@ import './CommunicationBoard.css'
 import { cardSound } from './CardSound.js';
 
   // SettingsPanel component for all settings
-const SettingsPanel = () => {
+const SettingsPanel = ({isMobileView}) => {
   const [settings, setSettings] = useState({
     colorBlindMode: false,
     screenReader: false,

@@ -1,3 +1,4 @@
+// src/components/SentenceBuilder.js
 import React, { useState, useEffect } from 'react';
 import './SentenceBuilder.css';
 import './CommunicationBoard.css';
@@ -9,15 +10,15 @@ const SentenceBuilder = ({ selectedCards, onCardRemove, onClearAll }) => {
   const [rate, setRate] = useState(1);
   const [pitch, setPitch] = useState(1);
 
-  // Create a sentence by joining the text from the selected cards
+  // Creates a sentence by joining the text from the selected cards
   const sentence = selectedCards.map(card => card.text).join(' ');
 
-  // Fetch available voices on component mount
+  // Fetches available voices on component mount
   useEffect(() => {
     const populateVoices = () => {
-      const availableVoices = window.speechSynthesis.getVoices();
+      const availableVoices = window.speechSynthesis.getVoices(); // Gets available voices from the browser that user can choose from
       setVoices(availableVoices);
-      const savedVoice = localStorage.getItem('selectedVoice');
+      const savedVoice = localStorage.getItem('selectedVoice'); // Fetches selected voice from local storage
       if (availableVoices.length > 0) {
         setSelectedVoice(savedVoice || availableVoices[0].name);
       }
@@ -30,29 +31,37 @@ const SentenceBuilder = ({ selectedCards, onCardRemove, onClearAll }) => {
   // Fetch rate and pitch from localStorage if available
   useEffect(() => {
     const savedRate = localStorage.getItem('speechRate');
-    const savedPitch = localStorage.getItem('speechPitch');
+    const savedPitch = localStorage.getItem('speechPitch'); 
     if (savedRate) setRate(savedRate);
     if (savedPitch) setPitch(savedPitch);
   }, []);
 
+  // Cancel speech when selectedCards is cleared
+  useEffect(() => {
+    if (selectedCards.length === 0 && isSpeaking) {
+      sentenceSpeech.cancel(); // Stop any ongoing speech
+      setIsSpeaking(false);    // Reset the speaking state
+    }
+  }, [selectedCards, isSpeaking]);
+
   const handleVoiceChange = (voiceName) => {
     setSelectedVoice(voiceName);
     localStorage.setItem('selectedVoice', voiceName);
-  };
+  }; // Handler for voice change
 
   const handleRateChange = (newRate) => {
     setRate(newRate);
     localStorage.setItem('speechRate', newRate);
-  };
+  }; // Handler for rate change
 
   const handlePitchChange = (newPitch) => {
     setPitch(newPitch);
     localStorage.setItem('speechPitch', newPitch);
-  };
+  }; // Handler for pitch change
 
   const speakSentence = () => {
     if (!window.speechSynthesis) {
-      alert('Sorry, your browser does not support Speech Synthesis.');
+      alert('Sorry, your browser does not support Speech Synthesis.'); // Error handling for browsers that do not support speech synthesis
       return;
     }
 
@@ -64,7 +73,7 @@ const SentenceBuilder = ({ selectedCards, onCardRemove, onClearAll }) => {
     }
 
     if (sentence.trim() === '') {
-      alert('Please select words to form a sentence.');
+      alert('Please select words to form a sentence.'); // Default error message for empty sentence
       return;
     }
 
@@ -79,26 +88,26 @@ const SentenceBuilder = ({ selectedCards, onCardRemove, onClearAll }) => {
       volume: 1.0, // Adjust volume as needed or make it dynamic
     });
 
-    setIsSpeaking(true);
+    setIsSpeaking(true); // Set speaking state to true
 
     // Event listeners for speech synthesis
     const handleEnd = () => {
       setIsSpeaking(false);
-      sentenceSpeech.speechSynthesis.removeEventListener('end', handleEnd);
+      sentenceSpeech.speechSynthesis.removeEventListener('end', handleEnd); // Removes event listener after speech ends
     };
 
     const handleError = (e) => {
       console.error('Sentence speech synthesis error:', e);
       setIsSpeaking(false);
-      sentenceSpeech.speechSynthesis.removeEventListener('error', handleError);
+      sentenceSpeech.speechSynthesis.removeEventListener('error', handleError); // Removes event listener after error
     };
 
     sentenceSpeech.speechSynthesis.addEventListener('end', handleEnd);
-    sentenceSpeech.speechSynthesis.addEventListener('error', handleError);
+    sentenceSpeech.speechSynthesis.addEventListener('error', handleError); // Adds event listener for error handling
   };
 
   const pauseSpeech = () => {
-    if (window.speechSynthesis.speaking && !window.speechSynthesis.paused) {
+    if (window.speechSynthesis.speaking && !window.speechSynthesis.paused) { // Pauses speech if it is speaking and not paused
       window.speechSynthesis.pause();
       setIsSpeaking(false);
     }
@@ -195,7 +204,7 @@ const SentenceBuilder = ({ selectedCards, onCardRemove, onClearAll }) => {
             value={rate}
             onChange={(e) => handleRateChange(e.target.value)}
             className="slider"
-            aria-label="Speech rate"
+            aria-label="Speech rate" // Aria label for speech rate slider
           />
           <span>{rate}</span>
         </label>
@@ -209,7 +218,7 @@ const SentenceBuilder = ({ selectedCards, onCardRemove, onClearAll }) => {
             value={pitch}
             onChange={(e) => handlePitchChange(e.target.value)}
             className="slider"
-            aria-label="Speech pitch"
+            aria-label="Speech pitch" // Aria label for speech pitch slider
           />
           <span>{pitch}</span>
         </label>

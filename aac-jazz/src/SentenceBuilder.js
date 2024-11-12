@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import './SentenceBuilder.css';
 import './CommunicationBoard.css';
 import { sentenceSpeech } from './SentenceSpeech.js'; 
+
 const SentenceBuilder = ({ selectedCards, onCardRemove, onClearAll }) => {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [voices, setVoices] = useState([]);
@@ -32,8 +33,8 @@ const SentenceBuilder = ({ selectedCards, onCardRemove, onClearAll }) => {
   useEffect(() => {
     const savedRate = localStorage.getItem('speechRate');
     const savedPitch = localStorage.getItem('speechPitch'); 
-    if (savedRate) setRate(savedRate);
-    if (savedPitch) setPitch(savedPitch);
+    if (savedRate) setRate(parseFloat(savedRate));
+    if (savedPitch) setPitch(parseFloat(savedPitch));
   }, []);
 
   // Cancel speech when selectedCards is cleared
@@ -202,7 +203,7 @@ const SentenceBuilder = ({ selectedCards, onCardRemove, onClearAll }) => {
             max="2"
             step="0.1"
             value={rate}
-            onChange={(e) => handleRateChange(e.target.value)}
+            onChange={(e) => handleRateChange(parseFloat(e.target.value))}
             className="slider"
             aria-label="Speech rate" // Aria label for speech rate slider
           />
@@ -216,7 +217,7 @@ const SentenceBuilder = ({ selectedCards, onCardRemove, onClearAll }) => {
             max="2"
             step="0.1"
             value={pitch}
-            onChange={(e) => handlePitchChange(e.target.value)}
+            onChange={(e) => handlePitchChange(parseFloat(e.target.value))}
             className="slider"
             aria-label="Speech pitch" // Aria label for speech pitch slider
           />
@@ -225,7 +226,6 @@ const SentenceBuilder = ({ selectedCards, onCardRemove, onClearAll }) => {
       </div>
     </div>
   );
-
 };
 
 export default SentenceBuilder;

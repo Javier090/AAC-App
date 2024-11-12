@@ -1,10 +1,10 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import './SettingsPanel.css';
-import './CommunicationBoard.css'  
+import './CommunicationBoard.css';  
 import { cardSound } from './CardSound.js';
 
-  // SettingsPanel component for all settings
-const SettingsPanel = (isMobileView) => {
+// SettingsPanel component for all settings
+const SettingsPanel = ({ isMobileView }) => {
   const [settings, setSettings] = useState({
     colorBlindMode: false,
     screenReader: false,
@@ -21,29 +21,36 @@ const SettingsPanel = (isMobileView) => {
     }
   }, [settings.colorBlindMode]);
 
-// UseEffect to toggle a simple screen reader.
-  /*useEffect(() => {
+  // UseEffect to toggle a simple screen reader.
+  /*
+  useEffect(() => {
     if (settings.screenReader) {
-        document.addEventListener('mouseenter', function (e) {
-          e.target.classList.add('.highlight')
-          speechSynthesis.speak(new SpeechSynthesisUtterance(e))
-        })
-        document.addEventListener('mouseleave', function (e) {
-          e.target.classList.remove('.highlight')
-          speechSynthesis.cancel()
-        })
-      //}
+      const handleMouseEnter = (e) => {
+        e.target.classList.add('highlight');
+        speechSynthesis.speak(new SpeechSynthesisUtterance(e.target.textContent));
+      };
+      const handleMouseLeave = () => {
+        speechSynthesis.cancel();
+      };
+      
+      document.addEventListener('mouseenter', handleMouseEnter);
+      document.addEventListener('mouseleave', handleMouseLeave);
+      
+      return () => {
+        document.removeEventListener('mouseenter', handleMouseEnter);
+        document.removeEventListener('mouseleave', handleMouseLeave);
+      };
     } else {
-      speechSynthesis.cancel()
+      speechSynthesis.cancel();
     }
-  }, [settings.screenReader]);*/
-  
+  }, [settings.screenReader]);
+  */
+
   // Import card sound js file to update card sound settings
   useEffect(() => {
     cardSound.setEnabled(settings.cardSound);
     cardSound.setVolume(settings.volume);
   }, [settings.cardSound, settings.volume]);
-
 
   // Function to handle setting changes
   const handleSettingChange = (setting, value) => {
@@ -121,7 +128,7 @@ const SettingsPanel = (isMobileView) => {
                   min="0"
                   max="100"
                   value={settings.volume}
-                  onChange={(e) => handleSettingChange('volume', parseInt(e.target.value))}
+                  onChange={(e) => handleSettingChange('volume', parseInt(e.target.value, 10))}
                   className="volume-slider"
                 />
               </div>

@@ -48,7 +48,7 @@ const CommunicationBoard = () => {
     };
 
     fetchCards();
-  },[currentDeck, API_URL]); // Fetches card from Azure API 
+  }, [currentDeck, API_URL]); // Fetches card from Azure API 
 
   const handleCardSelect = (card) => {
     const newSelectedCard = {
@@ -74,8 +74,12 @@ const CommunicationBoard = () => {
   };  // Handler for clearing all selected cards
 
   const handleCardDrop = (card) => {
-    setSelectedCards([...selectedCards, card]);
-  }; // Handler for card drop
+    const newCard = {
+      ...card,
+      instanceId: nanoid(), // Assign a unique ID
+    };
+    setSelectedCards((prevSelectedCards) => [...prevSelectedCards, newCard]);
+  }; // Correct Handler for card drop
 
   return (
     <div className="min-h-screen bg-gray-100">

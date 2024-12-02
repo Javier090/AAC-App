@@ -15,6 +15,7 @@ const SettingsPanel = ({ isMobileView }) => {
   });
 
   const [voices, setVoices] = useState([]);
+  const [selectedSetting, setSelectedSetting] = useState(''); // New state variable
 
   // Fetch available voices on component mount
   useEffect(() => {
@@ -69,31 +70,6 @@ const SettingsPanel = ({ isMobileView }) => {
     localStorage.setItem('colorBlindMode', settings.colorBlindMode);
   }, [settings.colorBlindMode]);
 
-  // Toggle screen reader (commented out in original, can be enabled if needed)
-  /*
-  useEffect(() => {
-    if (settings.screenReader) {
-      const handleMouseEnter = (e) => {
-        e.target.classList.add('highlight');
-        speechSynthesis.speak(new SpeechSynthesisUtterance(e.target.textContent));
-      };
-      const handleMouseLeave = () => {
-        speechSynthesis.cancel();
-      };
-      
-      document.addEventListener('mouseenter', handleMouseEnter);
-      document.addEventListener('mouseleave', handleMouseLeave);
-      
-      return () => {
-        document.removeEventListener('mouseenter', handleMouseEnter);
-        document.removeEventListener('mouseleave', handleMouseLeave);
-      };
-    } else {
-      speechSynthesis.cancel();
-    }
-  }, [settings.screenReader]);
-  */
-
   // Update card sound settings
   useEffect(() => {
     cardSound.setEnabled(settings.cardSound);
@@ -124,9 +100,7 @@ const SettingsPanel = ({ isMobileView }) => {
 
   const handleSelectChange = (e) => {
     const selectedOption = e.target.value;
-    if (selectedOption === 'colorBlindMode' || selectedOption === 'screenReader' || selectedOption === 'cardSound') {
-      handleSettingChange(selectedOption, !settings[selectedOption]);
-    }
+    setSelectedSetting(selectedOption); // Update selectedSetting
   };
 
   // Handle voice selection
@@ -153,22 +127,144 @@ const SettingsPanel = ({ isMobileView }) => {
     }));
   };
 
+  // Handle toggling checkboxes in mobile view
+  const handleToggleSetting = (setting) => {
+    handleSettingChange(setting, !settings[setting]);
+    setSelectedSetting(''); // Reset selectedSetting after toggling
+  };
+
   return (
     <div className={`settings-panel ${settings.colorBlindMode ? 'color-blind-active' : ''}`}>
       <h2 className="settings-title">Settings</h2>
 
       {isMobileView ? (
         // Mobile view: dropdown for selecting settings
-        <select className="w-full p-2 border rounded" onChange={handleSelectChange}>
-          <option value="">Select Setting</option>
-          <option value="colorBlindMode">Toggle Color Blind Mode</option>
-          <option value="screenReader">Toggle Screen Reader</option>
-          <option value="cardSound">Toggle Card Sound</option>
-          <option value="volume">Adjust Volume</option>
-          <option value="selectedVoice">Select Voice</option>
-          <option value="rate">Adjust Rate</option>
-          <option value="pitch">Adjust Pitch</option>
-        </select>
+        <div className="mobile-settings-container">
+          <select 
+            className="settings-dropdown" 
+            value={selectedSetting} 
+            onChange={handleSelectChange}
+          >
+            <option value="">Select Setting</option>
+            <option value="colorBlindMode">Toggle Color Blind Mode</option>
+            <option value="screenReader">Toggle Screen Reader</option>
+            <option value="cardSound">Toggle Card Sound</option>
+            <option value="volume">Adjust Volume</option>
+            <option value="selectedVoice">Select Voice</option>
+            <option value="rate">Adjust Rate</option>
+            <option value="pitch">Adjust Pitch</option>
+          </select>
+
+          {/* Conditionally render the selected setting's control */}
+          {selectedSetting === 'colorBlindMode' && (
+            <div className="mobile-control">
+              <label className="option-label">
+                <input
+                  type="checkbox"
+                  checked={settings.colorBlindMode}
+                  onChange={() => handleToggleSetting('colorBlindMode')}
+                  className="option-checkbox"
+                />
+                <span className="checkbox-text">Color Blind Mode</span>
+              </label>
+            </div>
+          )}
+
+          {selectedSetting === 'screenReader' && (
+            <div className="mobile-control">
+              <label className="option-label">
+                <input
+                  type="checkbox"
+                  checked={settings.screenReader}
+                  onChange={() => handleToggleSetting('screenReader')}
+                  className="option-checkbox"
+                />
+                <span className="checkbox-text">Screen Reader</span>
+              </label>
+            </div>
+          )}
+
+          {selectedSetting === 'cardSound' && (
+            <div className="mobile-control">
+              <label className="option-label">
+                <input
+                  type="checkbox"
+                  checked={settings.cardSound}
+                  onChange={() => handleToggleSetting('cardSound')}
+                  className="option-checkbox"
+                />
+                <span className="checkbox-text">Card Sound</span>
+              </label>
+            </div>
+          )}
+
+          {selectedSetting === 'volume' && (
+            <div className="mobile-control">
+              <label className="volume-label">Volume</label>
+              <input
+                type="range"
+                min="0"
+                max="100"
+                value={settings.volume}
+                onChange={(e) => handleSettingChange('volume', parseInt(e.target.value, 10))}
+                className="volume-slider"
+              />
+              <span className="volume-value">{settings.volume}</span>
+            </div>
+          )}
+
+          {selectedSetting === 'selectedVoice' && voices.length > 0 && (
+            <div className="mobile-control">
+              <label htmlFor="voice-select" className="voice-label">Select Voice:</label>
+              <select
+                id="voice-select"
+                value={settings.selectedVoice}
+                onChange={(e) => handleVoiceChange(e.target.value)}
+                className="voice-select-dropdown"
+              >
+                {voices.map(voice => (
+                  <option key={voice.name} value={voice.name}>
+                    {voice.name} ({voice.lang})
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
+
+          {selectedSetting === 'rate' && (
+            <div className="mobile-control">
+              <label htmlFor="rate-slider" className="rate-label">Rate:</label>
+              <input
+                id="rate-slider"
+                type="range"
+                min="0.5"
+                max="2"
+                step="0.1"
+                value={settings.rate}
+                onChange={(e) => handleRateChange(parseFloat(e.target.value))}
+                className="rate-slider"
+              />
+              <span className="rate-value">{settings.rate}</span>
+            </div>
+          )}
+
+          {selectedSetting === 'pitch' && (
+            <div className="mobile-control">
+              <label htmlFor="pitch-slider" className="pitch-label">Pitch:</label>
+              <input
+                id="pitch-slider"
+                type="range"
+                min="0"
+                max="2"
+                step="0.1"
+                value={settings.pitch}
+                onChange={(e) => handlePitchChange(parseFloat(e.target.value))}
+                className="pitch-slider"
+              />
+              <span className="pitch-value">{settings.pitch}</span>
+            </div>
+          )}
+        </div>
       ) : (
         // Desktop view: checkboxes and sliders
         <>
@@ -220,6 +316,7 @@ const SettingsPanel = ({ isMobileView }) => {
                   onChange={(e) => handleSettingChange('volume', parseInt(e.target.value, 10))}
                   className="volume-slider"
                 />
+                <span className="volume-value">{settings.volume}</span>
               </div>
 
               {/* Voice Selection Dropdown */}

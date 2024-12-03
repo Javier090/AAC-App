@@ -11,6 +11,7 @@ const SettingsPanel = ({ isMobileView }) => {
     cardSound: false,
     volume: 50
   });
+  const [showVolumeSlider, setShowVolumeSlider] = useState(false);
 
   // UseEffect to apply color blind mode to body element
   useEffect(() => {
@@ -64,6 +65,12 @@ const SettingsPanel = ({ isMobileView }) => {
     const selectedOption = e.target.value;
     if (selectedOption === 'colorBlindMode' || selectedOption === 'screenReader' || selectedOption === 'cardSound') {
       handleSettingChange(selectedOption, !settings[selectedOption]);
+      setShowVolumeSlider(false);
+    }
+
+    // Show the volume slider if 'volume' is selected
+    if (selectedOption === 'volume') {
+      setShowVolumeSlider(true);
     }
   };
 
@@ -73,7 +80,7 @@ const SettingsPanel = ({ isMobileView }) => {
         <h2 className="settings-title">Settings</h2>
 
         {isMobileView ? (
-          // Mobile view: dropdown for selecting settings
+        <>
           <select className="w-full p-2 border rounded" onChange={handleSelectChange}>
             <option value="">Select Setting</option>
             <option value="colorBlindMode">Toggle Color Blind Mode</option>
@@ -81,7 +88,21 @@ const SettingsPanel = ({ isMobileView }) => {
             <option value="cardSound">Toggle Card Sound</option>
             <option value="volume">Adjust Volume</option>
           </select>
-        ) : (
+          {showVolumeSlider && (
+          <div className="volume-control">
+            <br></br>
+            <label className="volume-label">Volume</label>
+            <input
+              type="range"
+              min="0"
+              max="100"
+              value={settings.volume}
+              onChange={(e) => handleSettingChange('volume', parseInt(e.target.value))}
+              className="volume-slider"
+            />
+          </div>)}
+        </>
+      ) : (
           // Desktop view: checkboxes and slider
           <>
             <div className="settings-section">

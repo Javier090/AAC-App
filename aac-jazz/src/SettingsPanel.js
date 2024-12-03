@@ -17,7 +17,7 @@ const SettingsPanel = ({ isMobileView }) => {
   const [voices, setVoices] = useState([]);
   const [selectedSetting, setSelectedSetting] = useState(''); // New state variable
 
-  // Fetch available voices on component mount
+  // Fetches the available voices on users device
   useEffect(() => {
     const populateVoices = () => {
       const availableVoices = window.speechSynthesis.getVoices();
@@ -34,13 +34,13 @@ const SettingsPanel = ({ isMobileView }) => {
     populateVoices();
     window.speechSynthesis.onvoiceschanged = populateVoices;
 
-    // Cleanup on unmount
+    // Cleanup on page unload 
     return () => {
       window.speechSynthesis.onvoiceschanged = null;
     };
   }, []);
 
-  // Load other settings from localStorage on mount
+  // Load in other settings from localStorage on mount
   useEffect(() => {
     const savedColorBlindMode = localStorage.getItem('colorBlindMode') === 'true';
     const savedScreenReader = localStorage.getItem('screenReader') === 'true';
@@ -155,7 +155,7 @@ const SettingsPanel = ({ isMobileView }) => {
             <option value="pitch">Adjust Pitch</option>
           </select>
 
-          {/* Conditionally render the selected setting's control */}
+          {/* Conditionally render the selected settings control */}
           {selectedSetting === 'colorBlindMode' && (
             <div className="mobile-control">
               <label className="option-label">

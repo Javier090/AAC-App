@@ -80,7 +80,7 @@
   margin-top: -6px; /* Centers the thumb vertically */
 }
 
-/* Customize slider thumb for Mozilla Browsers */
+/* Customizes slider thumb for Mozilla Browsers */
 .settings-panel input[type="range"]::-moz-range-thumb {
   width: 16px;
   height: 16px;
@@ -89,7 +89,7 @@
   border-radius: 50%;
 }
 
-/* Voice Selection Container */
+/* Settings Selection Container */
 .settings-panel .voice-selection,
 .settings-panel .volume-control,
 .settings-panel .rate-control,
@@ -99,7 +99,7 @@
   box-sizing: border-box;
 }
 
-/* Create labels for proper spacing and sizing */
+/* Creates labels for proper spacing and sizing */
 .settings-panel .voice-label,
 .settings-panel .volume-label,
 .settings-panel .rate-label,
@@ -159,7 +159,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100%; /* Ensure the container spans full width */
+  width: 100%; /* Ensures the container spans full width */
   padding: 16px; /* Optional: padding around the container */
   box-sizing: border-box;
 }

@@ -1,4 +1,3 @@
-/* CommunicationBoard.css */
 .communication-board {
   display: grid;
   grid-template-columns: 250px 1fr; /* Fixed width for settings, flexible for content */
@@ -14,7 +13,7 @@
   }
 }
 
-.settings-panel { /* Ensure this class matches your actual settings panel */
+.settings-panel {
   display: flex;
   flex-direction: column;
   align-items: flex-start; /* Align content to the left */

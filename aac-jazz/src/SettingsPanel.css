@@ -8,21 +8,22 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start; /* Aligns the lower child elements to the left */
-  gap: 16px; /* Added the space between sections */
+  gap: 1px; /* Added the space between sections */
+  box-sizing: border-box;
 }
 
 .settings-panel h2 {
   font-size: 18px;
-  margin-bottom: 16px;
+  margin-bottom: 6px;
 }
 
 .settings-panel section {
-  margin-bottom: 24px;
+  margin-bottom: 4px;
 }
 
 .settings-panel label {
   display: block;
-  margin-bottom: 8px;
+  margin-bottom: 4px;
   font-weight: bold;
 }
 
@@ -36,7 +37,7 @@
 }
 
 .audio-settings {
-  margin-top: 20px;
+  margin-top: 2px;
 }
 
 .highlight {
@@ -46,46 +47,28 @@
 /* Voice Selection Dropdown */
 .settings-panel .voice-select-dropdown {
   width: 100%;
-  max-width: 100%;
   padding: 8px;
   border: 1px solid #ccc;
   border-radius: 4px;
   appearance: none; /* Removes default styling */
   background-color: #fff;
   font-size: 14px;
+  box-sizing: border-box;
 }
 
-/* Volume Slider */
-.settings-panel .volume-slider {
-  width: 100%;
-  max-width: 100%;
-  height: 4px;
-  background: #ddd;
-  border-radius: 2px;
-  outline: none;
-}
-
-/* Rate Slider */
-.settings-panel .rate-slider {
-  width: 100%;
-  max-width: 100%;
-  height: 4px;
-  background: #ddd;
-  border-radius: 2px;
-  outline: none;
-}
-
-/* Pitch Slider */
+/* Sliders Styling */
+.settings-panel .volume-slider,
+.settings-panel .rate-slider,
 .settings-panel .pitch-slider {
   width: 100%;
-  max-width: 100%;
   height: 4px;
   background: #ddd;
   border-radius: 2px;
   outline: none;
+  box-sizing: border-box;
 }
 
-/* Customize slider thumb */
+/* Customize slider thumb for WebKit Browsers */
 .settings-panel input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
@@ -94,8 +77,10 @@
   background: #3182ce;
   cursor: pointer;
   border-radius: 50%;
+  margin-top: -6px; /* Centers the thumb vertically */
 }
 
+/* Customize slider thumb for Mozilla Browsers */
 .settings-panel input[type="range"]::-moz-range-thumb {
   width: 16px;
   height: 16px;
@@ -111,6 +96,7 @@
 .settings-panel .pitch-control {
   width: 100%;
   margin-bottom: 16px; /* Space between controls */
+  box-sizing: border-box;
 }
 
 /* Create labels for proper spacing and sizing */
@@ -128,12 +114,15 @@
   display: flex;
   flex-direction: column;
   width: 100%;
+  box-sizing: border-box;
 }
 
 .settings-panel .settings-options {
   display: flex;
   flex-direction: column;
   gap: 12px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 /* Mobile-specific styles */
@@ -146,24 +135,33 @@
   justify-content: center;
 }
 
+/* Settings Dropdown in Mobile */
 .settings-dropdown {
   width: 100%;
   padding: 8px;
   border: 1px solid #ccc;
   border-radius: 4px;
   font-size: 14px;
+  box-sizing: border-box;
 }
 
+/* Mobile Control Container */
 .mobile-control {
   display: flex;
   flex-direction: column;
   gap: 8px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
+/* Mobile View Flexbox */
 .mobile-view {
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 100%; /* Ensure the container spans full width */
+  padding: 16px; /* Optional: padding around the container */
+  box-sizing: border-box;
 }
 
 /* Volume and Pitch Values */
@@ -207,6 +205,7 @@ body.color-blind-mode button {
   padding: 8px 16px;
   margin: 4px;
   font-weight: bold;
+  cursor: pointer;
 }
 
 /* Makes the communication cards more visible */
@@ -215,6 +214,7 @@ body.color-blind-mode .card {
   border: 3px solid #fff;
   padding: 16px;
   margin: 8px;
+  border-radius: 4px;
 }
 
 /* Enhances contrast for text elements */

@@ -1,24 +1,29 @@
 .settings-panel {
   background-color: #538614;
-  padding: 16px;
+  padding: 16px; /* Adjusted the padding */
   border: 2px solid #ddd;
   border-radius: 4px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  width: 100%;
+  width: 100%; /* Makes sure the panel takes full width of the grid cell */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Aligns the lower child elements to the left */
+  gap: 1px; /* Added the space between sections */
+  box-sizing: border-box;
 }
 
 .settings-panel h2 {
   font-size: 18px;
-  margin-bottom: 16px;
+  margin-bottom: 6px;
 }
 
 .settings-panel section {
-  margin-bottom: 16px;
+  margin-bottom: 4px;
 }
 
 .settings-panel label {
   display: block;
-  margin-bottom: 8px;
+  margin-bottom: 4px;
   font-weight: bold;
 }
 
@@ -32,16 +37,144 @@
 }
 
 .audio-settings {
-  margin-top: 20px;
+  margin-top: 2px;
 }
 
 .highlight {
   outline: red solid 2px;
 }
 
+/* Voice Selection Dropdown */
+.settings-panel .voice-select-dropdown {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  appearance: none; /* Removes default styling */
+  background-color: #fff;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+/* Sliders Styling */
+.settings-panel .volume-slider,
+.settings-panel .rate-slider,
+.settings-panel .pitch-slider {
+  width: 100%;
+  height: 4px;
+  background: #ddd;
+  border-radius: 2px;
+  outline: none;
+  box-sizing: border-box;
+}
+
+/* Customize slider thumb for WebKit Browsers */
+.settings-panel input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  background: #3182ce;
+  cursor: pointer;
+  border-radius: 50%;
+  margin-top: -6px; /* Centers the thumb vertically */
+}
+
+/* Customizes slider thumb for Mozilla Browsers */
+.settings-panel input[type="range"]::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  background: #3182ce;
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+/* Settings Selection Container */
+.settings-panel .voice-selection,
+.settings-panel .volume-control,
+.settings-panel .rate-control,
+.settings-panel .pitch-control {
+  width: 100%;
+  margin-bottom: 16px; /* Space between controls */
+  box-sizing: border-box;
+}
+
+/* Creates labels for proper spacing and sizing */
+.settings-panel .voice-label,
+.settings-panel .volume-label,
+.settings-panel .rate-label,
+.settings-panel .pitch-label {
+  width: 100%;
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+
+/* Added additional flexbox for settings sections */
+.settings-panel .settings-section {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.settings-panel .settings-options {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Mobile-specific styles */
+.mobile-settings-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center; 
+  justify-content: center;
+}
+
+/* Settings Dropdown in Mobile */
+.settings-dropdown {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+/* Mobile Control Container */
+.mobile-control {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Mobile View Flexbox */
+.mobile-view {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%; /* Ensures the container spans full width */
+  padding: 16px; /* Optional: padding around the container */
+  box-sizing: border-box;
+}
+
+/* Volume and Pitch Values */
+.volume-value,
+.rate-value,
+.pitch-value {
+  font-size: 14px;
+  margin-top: 4px;
+}
+
 /* Enhanced (red-green) Color Blind Mode Styles */
 body.color-blind-mode {
-  /* Crates contrast background for the entire page */
+  /* Creates contrast background for the entire page */
   background-color: #000;
   color: #ff7300;
 }
@@ -72,6 +205,7 @@ body.color-blind-mode button {
   padding: 8px 16px;
   margin: 4px;
   font-weight: bold;
+  cursor: pointer;
 }
 
 /* Makes the communication cards more visible */
@@ -80,6 +214,7 @@ body.color-blind-mode .card {
   border: 3px solid #fff;
   padding: 16px;
   margin: 8px;
+  border-radius: 4px;
 }
 
 /* Enhances contrast for text elements */

@@ -6,22 +6,12 @@ import { sentenceSpeech } from './SentenceSpeech.js';
 const SentenceBuilder = ({ selectedCards, onCardRemove, onClearAll, onCardDrop }) => {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [voices, setVoices] = useState([]);
-  const [selectedVoice, setSelectedVoice] = useState(null);
-  const [rate, setRate] = useState(1);
-  const [pitch, setPitch] = useState(1);
 
-  // Create a sentence by joining the text from the selected cards
-  const sentence = selectedCards.map(card => card.text).join(' ');
-
-  // Fetches available voices on component mount
+  // Fetch voices to ensure they are loaded
   useEffect(() => {
     const populateVoices = () => {
       const availableVoices = window.speechSynthesis.getVoices();
       setVoices(availableVoices);
-      const savedVoice = localStorage.getItem('selectedVoice');
-      if (availableVoices.length > 0) {
-        setSelectedVoice(savedVoice || availableVoices[0].name);
-      }
     };
 
     populateVoices();
@@ -33,13 +23,8 @@ const SentenceBuilder = ({ selectedCards, onCardRemove, onClearAll, onCardDrop }
     };
   }, []);
 
-  // Fetch rate and pitch from localStorage if available
-  useEffect(() => {
-    const savedRate = localStorage.getItem('speechRate');
-    const savedPitch = localStorage.getItem('speechPitch'); 
-    if (savedRate) setRate(parseFloat(savedRate));
-    if (savedPitch) setPitch(parseFloat(savedPitch));
-  }, []);
+  // Create a sentence by joining the text from the selected cards
+  const sentence = selectedCards.map(card => card.text).join(' ');
 
   // Cancel speech when selectedCards is cleared
   useEffect(() => {
@@ -48,24 +33,6 @@ const SentenceBuilder = ({ selectedCards, onCardRemove, onClearAll, onCardDrop }
       setIsSpeaking(false);
     }
   }, [selectedCards, isSpeaking]);
-
-  // Handle voice change
-  const handleVoiceChange = (voiceName) => {
-    setSelectedVoice(voiceName);
-    localStorage.setItem('selectedVoice', voiceName);
-  };
-
-  // Handle rate change
-  const handleRateChange = (newRate) => {
-    setRate(newRate);
-    localStorage.setItem('speechRate', newRate);
-  };
-
-  // Handle pitch change
-  const handlePitchChange = (newPitch) => {
-    setPitch(newPitch);
-    localStorage.setItem('speechPitch', newPitch);
-  };
 
   // Speak or stop the sentence
   const speakSentence = () => {
@@ -85,7 +52,12 @@ const SentenceBuilder = ({ selectedCards, onCardRemove, onClearAll, onCardDrop }
       return;
     }
 
-    const voice = voices.find(v => v.name === selectedVoice);
+    // Retrieve settings from localStorage
+    const selectedVoiceName = localStorage.getItem('selectedVoice');
+    const rate = parseFloat(localStorage.getItem('speechRate')) || 1;
+    const pitch = parseFloat(localStorage.getItem('speechPitch')) || 1;
+
+    const voice = voices.find(v => v.name === selectedVoiceName);
 
     sentenceSpeech.speak(sentence, {
       voice: voice,
@@ -160,22 +132,6 @@ const SentenceBuilder = ({ selectedCards, onCardRemove, onClearAll, onCardDrop }
       </div>
       
       <div className="controls">
-        {/* Voice Selection Dropdown */}
-        {voices.length > 0 && (
-          <select
-            value={selectedVoice}
-            onChange={(e) => handleVoiceChange(e.target.value)}
-            className="voice-select"
-            aria-label="Select voice"
-          >
-            {voices.map(voice => (
-              <option key={voice.name} value={voice.name}>
-                {voice.name} ({voice.lang})
-              </option>
-            ))}
-          </select>
-        )}
-
         {/* Clear All Button */}
         <button onClick={onClearAll} className="clear-all-button">
           {selectedCards.length > 0 ? 'Clear All' : 'Start Selecting'}
@@ -210,38 +166,6 @@ const SentenceBuilder = ({ selectedCards, onCardRemove, onClearAll, onCardDrop }
             </button>
           </>
         )}
-      </div>
-
-      {/* Rate and Pitch Controls */}
-      <div className="rate-pitch-controls">
-        <label>
-          Rate:
-          <input
-            type="range"
-            min="0.5"
-            max="2"
-            step="0.1"
-            value={rate}
-            onChange={(e) => handleRateChange(parseFloat(e.target.value))}
-            className="slider"
-            aria-label="Speech rate"
-          />
-          <span>{rate}</span>
-        </label>
-        <label>
-          Pitch:
-          <input
-            type="range"
-            min="0"
-            max="2"
-            step="0.1"
-            value={pitch}
-            onChange={(e) => handlePitchChange(parseFloat(e.target.value))}
-            className="slider"
-            aria-label="Speech pitch"
-          />
-          <span>{pitch}</span>
-        </label>
       </div>
     </div>
   );

@@ -3,6 +3,8 @@ import './SettingsPanel.css';
 import './CommunicationBoard.css';  
 import { cardSound } from './CardSound.js';
 
+const readTypes = ['input', 'h1', 'h2', 'h3', 'div', 'button', 'img'];
+
 // SettingsPanel component for all settings
 const SettingsPanel = ({ isMobileView }) => {
   const [settings, setSettings] = useState({

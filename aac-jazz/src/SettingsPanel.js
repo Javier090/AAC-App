@@ -35,23 +35,27 @@ const SettingsPanel = ({ isMobileView }) => {
 
           elm.onmouseenter = function (e) {
             e.stopPropagation()
-            elm.classList.add("highlight");
-            let tag = elm.tagName.toLowerCase();
-        
-            let toRead = elm.innerText;
-            if (tag === "img") {
-              toRead = elm.getAttribute('alt') + " card";
+            if (elm.classList.contains('screen-reader')) {
+              elm.classList.add("highlight");
+              let tag = elm.tagName.toLowerCase();
+
+              let toRead = elm.innerText;
+              if (tag === "img") {
+                toRead = elm.getAttribute('alt') + " card";
+                speechSynthesis.speak(new SpeechSynthesisUtterance(toRead));
+                return;
+              }
+
               speechSynthesis.speak(new SpeechSynthesisUtterance(toRead));
-              return;
             }
 
-            speechSynthesis.speak(new SpeechSynthesisUtterance(toRead));
-          }
 
-          elm.addEventListener('mouseleave', function (e) {
-            elm.classList.remove("highlight");
-            speechSynthesis.cancel();
-          })
+            elm.addEventListener('mouseleave', function (e) {
+              elm.classList.remove("highlight");
+              speechSynthesis.cancel();
+            })
+
+          }
         })
       }
     } else {
@@ -59,11 +63,14 @@ const SettingsPanel = ({ isMobileView }) => {
       for (type in readTypes) {
         let readables = document.querySelectorAll(readTypes[type]);
         readables.forEach(elm => {
+          elm.classList.remove("highlight");
+          speechSynthesis.cancel();
           elm.classList.remove('screen-reader');
         })
       }
     }
   }, [settings.screenReader]);
+
 
 
   // Import card sound js file to update card sound settings

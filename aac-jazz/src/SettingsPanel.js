@@ -23,29 +23,46 @@ const SettingsPanel = ({ isMobileView }) => {
   }, [settings.colorBlindMode]);
 
   // UseEffect to toggle a simple screen reader.
-  /*
   useEffect(() => {
     if (settings.screenReader) {
-      const handleMouseEnter = (e) => {
-        e.target.classList.add('highlight');
-        speechSynthesis.speak(new SpeechSynthesisUtterance(e.target.textContent));
-      };
-      const handleMouseLeave = () => {
-        speechSynthesis.cancel();
-      };
-      
-      document.addEventListener('mouseenter', handleMouseEnter);
-      document.addEventListener('mouseleave', handleMouseLeave);
-      
-      return () => {
-        document.removeEventListener('mouseenter', handleMouseEnter);
-        document.removeEventListener('mouseleave', handleMouseLeave);
-      };
+      let type;
+      for (type in readTypes) {
+        let readables = document.querySelectorAll(readTypes[type]);
+        readables.forEach(elm => {
+          elm.classList.add('screen-reader');
+
+          elm.onmouseenter = function (e) {
+            e.stopPropagation()
+            elm.classList.add("highlight");
+            let tag = elm.tagName.toLowerCase();
+        
+            let toRead = elm.innerText;
+            if (tag === "img") {
+              toRead = elm.getAttribute('alt') + " card";
+              speechSynthesis.speak(new SpeechSynthesisUtterance(toRead));
+              return;
+            }
+
+            speechSynthesis.speak(new SpeechSynthesisUtterance(toRead));
+          }
+
+          elm.addEventListener('mouseleave', function (e) {
+            elm.classList.remove("highlight");
+            speechSynthesis.cancel();
+          })
+        })
+      }
     } else {
-      speechSynthesis.cancel();
+      let type;
+      for (type in readTypes) {
+        let readables = document.querySelectorAll(readTypes[type]);
+        readables.forEach(elm => {
+          elm.classList.remove('screen-reader');
+        })
+      }
     }
   }, [settings.screenReader]);
-  */
+
 
   // Import card sound js file to update card sound settings
   useEffect(() => {

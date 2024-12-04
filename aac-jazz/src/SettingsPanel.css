@@ -240,3 +240,9 @@ body.color-blind-mode *:focus {
   outline: 3px solid #ff0;
   outline-offset: 2px;
 }
+
+.mobile-view {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

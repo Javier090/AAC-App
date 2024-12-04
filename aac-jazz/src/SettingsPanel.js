@@ -3,6 +3,8 @@ import './SettingsPanel.css';
 import './CommunicationBoard.css';  
 import { cardSound } from './CardSound.js';
 
+const readTypes = ['input', 'h1', 'h2', 'h3', 'div', 'button', 'img'];
+// SettingsPanel component for all settings
 const SettingsPanel = ({ isMobileView }) => {
   const [settings, setSettings] = useState({
     colorBlindMode: false,
@@ -13,11 +15,11 @@ const SettingsPanel = ({ isMobileView }) => {
     rate: 1,
     pitch: 1
   });
-
+  const [showVolumeSlider, setShowVolumeSlider] = useState(false);
   const [voices, setVoices] = useState([]);
-  const [selectedSetting, setSelectedSetting] = useState(''); // New state variable
+  const [selectedSetting, setSelectedSetting] = useState('');
 
-  // Fetches the available voices on users device
+  // Fetches the available voices on user's device
   useEffect(() => {
     const populateVoices = () => {
       const availableVoices = window.speechSynthesis.getVoices();
@@ -70,6 +72,49 @@ const SettingsPanel = ({ isMobileView }) => {
     localStorage.setItem('colorBlindMode', settings.colorBlindMode);
   }, [settings.colorBlindMode]);
 
+  // UseEffect to toggle a simple screen reader.
+  useEffect(() => {
+    if (settings.screenReader) {
+      readTypes.forEach(type => {
+        const readables = document.querySelectorAll(type);
+        readables.forEach(elm => {
+          elm.classList.add('screen-reader');
+
+          elm.onmouseenter = function (e) {
+            e.stopPropagation();
+            if (elm.classList.contains('screen-reader')) {
+              elm.classList.add("highlight");
+              let tag = elm.tagName.toLowerCase();
+
+              let toRead = elm.innerText;
+              if (tag === "img") {
+                toRead = elm.getAttribute('alt') + " card";
+                speechSynthesis.speak(new SpeechSynthesisUtterance(toRead));
+                return;
+              }
+
+              speechSynthesis.speak(new SpeechSynthesisUtterance(toRead));
+            }
+
+            elm.addEventListener('mouseleave', function (e) {
+              elm.classList.remove("highlight");
+              speechSynthesis.cancel();
+            });
+          };
+        });
+      });
+    } else {
+      readTypes.forEach(type => {
+        const readables = document.querySelectorAll(type);
+        readables.forEach(elm => {
+          elm.classList.remove("highlight");
+          speechSynthesis.cancel();
+          elm.classList.remove('screen-reader');
+        });
+      });
+    }
+  }, [settings.screenReader]);
+
   // Update card sound settings
   useEffect(() => {
     cardSound.setEnabled(settings.cardSound);
@@ -100,7 +145,17 @@ const SettingsPanel = ({ isMobileView }) => {
 
   const handleSelectChange = (e) => {
     const selectedOption = e.target.value;
-    setSelectedSetting(selectedOption); // Update selectedSetting
+    setSelectedSetting(selectedOption);
+
+    if (selectedOption === 'colorBlindMode' || selectedOption === 'screenReader' || selectedOption === 'cardSound') {
+      handleSettingChange(selectedOption, !settings[selectedOption]);
+      setShowVolumeSlider(false);
+    }
+
+    // Show the volume slider if 'volume' is selected
+    if (selectedOption === 'volume') {
+      setShowVolumeSlider(true);
+    }
   };
 
   // Handle voice selection
@@ -156,6 +211,21 @@ const SettingsPanel = ({ isMobileView }) => {
           </select>
 
           {/* Conditionally render the selected settings control */}
+          {showVolumeSlider && (
+            <div className="mobile-control">
+              <label className="volume-label">Volume</label>
+              <input
+                type="range"
+                min="0"
+                max="100"
+                value={settings.volume}
+                onChange={(e) => handleSettingChange('volume', parseInt(e.target.value, 10))}
+                className="volume-slider"
+              />
+              <span className="volume-value">{settings.volume}</span>
+            </div>
+          )}
+
           {selectedSetting === 'colorBlindMode' && (
             <div className="mobile-control">
               <label className="option-label">
@@ -195,21 +265,6 @@ const SettingsPanel = ({ isMobileView }) => {
                 />
                 <span className="checkbox-text">Card Sound</span>
               </label>
-            </div>
-          )}
-
-          {selectedSetting === 'volume' && (
-            <div className="mobile-control">
-              <label className="volume-label">Volume</label>
-              <input
-                type="range"
-                min="0"
-                max="100"
-                value={settings.volume}
-                onChange={(e) => handleSettingChange('volume', parseInt(e.target.value, 10))}
-                className="volume-slider"
-              />
-              <span className="volume-value">{settings.volume}</span>
             </div>
           )}
 
